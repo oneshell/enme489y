@@ -2,6 +2,7 @@
 # Week 2: Introduction to Python & PyCharm
 
 import numpy as np
+import matplotlib
 import cv2
 import imutils
 
