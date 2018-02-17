@@ -28,8 +28,8 @@ time.sleep(0.1)
 
 # define the codec and create VideoWriter object
 # UNCOMMENT THE FOLLOWING TWO (2) LINES TO SAVE .mp4 VIDEO FILE
-# fourcc = cv2.VideoWriter_fourcc(*'MP4V')
-# out = cv2.VideoWriter('stoplight.mp4',fourcc,25,(640, 480))
+# fourcc = cv2.VideoWriter_fourcc(*'XVID')
+# out = cv2.VideoWriter('stoplight.avi',fourcc,10,(640, 480))
 
 
 # keep looping
@@ -76,7 +76,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 		# write the frame to video file
 		# UNCOMMENT THE FOLLOWING ONE (1) LINE TO SAVE .avi VIDEO FILE
-		# out.write(image)
+			#out.write(image)
 
 	# show the frame to our screen
 	cv2.imshow("Frame", image)
