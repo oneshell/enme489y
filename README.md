@@ -10,7 +10,7 @@ Week 3: OpenCV Fundamentals
 
 -All code is contained in opencvfundamentals.py
 
-Week 4: Lane Detection
+Week 4 & 5: Lane Detection
 
 -Download lanedetectiontestvideo.mp4 and run with lanedetection.py
 
