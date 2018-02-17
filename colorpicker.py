@@ -6,6 +6,8 @@
 
 # HOW TO USE: enter the following into the RPi command window
 #
+# source ~/.profile
+# workon cv
 # python colorpicker.py -f HSV -i name_of_image_file.jpg
 #
 # where name_of_image_file.jpg is the name of the file
