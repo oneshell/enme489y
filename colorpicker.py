@@ -76,7 +76,7 @@ def main():
 	if args['image']:
 		# ensure the name of your image file is
 		# provided in the line below
-		image = cv2.imread('laser_spot.jpg',1)
+		image = cv2.imread(args["image"],1)
 		# resize image to fit the screen
 		# feel free to modify the value of "width" as desired
 		image = imutils.resize(image, width=600)
