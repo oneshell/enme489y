@@ -27,8 +27,10 @@ rawCapture = PiRGBArray(camera, size=(640,480))
 time.sleep(0.1)
 
 # define the codec and create VideoWriter object
-# UNCOMMENT THE FOLLOWING TWO (2) LINES TO SAVE .mp4 VIDEO FILE
+# UNCOMMENT THE FOLLOWING TWO (2) LINES TO SAVE .avi VIDEO FILE
+# TRY BOTH XVID THEN MJPG, IN THE EVENT THE .avi FILE IS NOT SAVING PROPERLY
 # fourcc = cv2.VideoWriter_fourcc(*'XVID')
+# fourcc = cv2.VideoWriter_fourcc(*'MJPG')
 # out = cv2.VideoWriter('stoplight.avi',fourcc,10,(640, 480))
 
 
