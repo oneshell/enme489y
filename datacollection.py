@@ -26,7 +26,7 @@ print d
 for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=False):
 
 	image = frame.array
-	image = cv2.flip(image,-1)
+	image = cv2.flip(image,-1)	# this may need to be changed based on your setup
 
 	# plot crosshairs for alignment
 	cv2.line(image, (640,0), (640,720), (0,150,150), 1)
@@ -49,7 +49,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 	if key == ord("q"):
 		break
 
-	# press m to save .jpg image with distance as filename
+	# press m to save .jpg image with imu angle as filename
 	if key == ord("m"):
 		d = int(d)
 		filename = "%d.jpg" %d
