@@ -60,10 +60,13 @@ for x in files:  # x is the filename
         if x[i] > 200:
             print i
             spot.append(i)
-    print spot
-    spot = np.average(spot)
-    spot = int(spot)
-
+    if len(spot) > 0:
+        print spot
+        spot = np.average(spot)
+        spot = int(spot)
+    else: 
+        spot = 1
+        
     #  Draw line of interest on original image & plot
     cv2.line(mask, (620, y), (1280, y), (255,255,255), 2)
     cv2.circle(mask, (spot, 360), 20, (255,255,255))
