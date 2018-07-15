@@ -1,5 +1,8 @@
 # ENME 489Y: Remote Sensing
-# Basic Lane Detection
+# Week 4: Basic Lane Detection
+# Code includes lane averaging
+
+# https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_imgproc/py_houghlines/py_houghlines.html
 
 # Processing pipeline:
 # 1. Open video stream and grab single frame
@@ -31,7 +34,7 @@ print " "
 # camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
 # Identify filename of video
-camera = cv2.VideoCapture('11July2018/05.avi')
+camera = cv2.VideoCapture('11July2018/15.avi')
 
 # Initialize arrays for averaging across multiple frames
 x_1 = []; x_2 = []; x_3 = []; x_4 = []; y_1 = []; y_2 = []; y_3 = []; y_4 = []
@@ -59,9 +62,18 @@ def mask_image(img):
     masked = cv2.bitwise_and(img, img, mask=mask)
     return masked
 
-# Convert to grayscale then black/white to binary image
+# Mask frame for color of lane lines, convert to grayscale then black/white to binary image
 def thres_image(img):
-    frame = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    yellowLower = np.array([0, 65, 164])
+    yellowUpper = np.array([255, 255, 255])
+    whiteLower = np.array([0, 0, 208])
+    whiteUpper = np.array([255, 255, 255])
+    yellow_mask = cv2.inRange(hsv, yellowLower, yellowUpper)
+    white_mask = cv2.inRange(hsv, whiteLower, whiteUpper)
+    full_mask = cv2.bitwise_or(yellow_mask, white_mask)
+    frame = cv2.bitwise_or(gray, full_mask)
     thresh = 180
     frame = cv2.threshold(frame, thresh, 255, cv2.THRESH_BINARY)[1]
     return frame
@@ -148,84 +160,87 @@ def main():
 
         frame = grab_frame(camera)
         final_output = frame.copy()
+        # cv2.imwrite("testimage.jpg", frame)
         # cv2.imshow("Camera Frame", frame)
 
-        snip = snip_image(frame)
-        # cv2.imshow("Region of Interest", frame)
-        # cv2.imshow("Snip", snip)
+        if counter > 1000:
 
-        masked = mask_image(snip)
-        # cv2.imshow("Masked", masked)
+            snip = snip_image(frame)
+            # cv2.imshow("Region of Interest", frame)
+            # cv2.imshow("Snip", snip)
 
-        frame = thres_image(masked)
-        # cv2.imshow("Thresholded to B/W", frame)
+            masked = mask_image(snip)
+            # cv2.imshow("Masked", masked)
 
-        blurred = blur_image(frame)
-        # cv2.imshow("Blurred", blurred)
+            frame = thres_image(masked)
+            # cv2.imshow("Thresholded to B/W", frame)
 
-        edged = edge_image(blurred)
-        # cv2.imshow("Edged", edged)
+            blurred = blur_image(frame)
+            # cv2.imshow("Blurred", blurred)
 
-        lines = line_image(edged)
+            edged = edge_image(blurred)
+            # cv2.imshow("Edged", edged)
 
-        # initialize arrays for left and right lanes
-        rho_left = []; theta_left = []; rho_right = []; theta_right = []
+            lines = line_image(edged)
 
-        # ensure cv2.HoughLines found at least one line
-        if lines is not None:
+            # initialize arrays for left and right lanes
+            rho_left = []; theta_left = []; rho_right = []; theta_right = []
 
-            # loop through all of the lines found by cv2.HoughLines
-            for i in range(0, len(lines)):
+            # ensure cv2.HoughLines found at least one line
+            if lines is not None:
 
-                # evaluate each row of cv2.HoughLines output 'lines'
-                for rho, theta in lines[i]:
+                # loop through all of the lines found by cv2.HoughLines
+                for i in range(0, len(lines)):
 
-                    # collect LEFT lanes
-                    if theta < np.pi * 0.4 and theta > np.pi * 0.2:
-                    # if rho > 0:
-                        rho_left.append(rho); theta_left.append(theta)
-                        # snipp = plot_Hough_lines(snip, rho, theta)
-                        # cv2.imshow("Yup!", snipp)
+                    # evaluate each row of cv2.HoughLines output 'lines'
+                    for rho, theta in lines[i]:
 
-                    # collect RIGHT lanes
-                    if theta > np.pi * 0.6 and theta < np.pi * 0.8:
-                    # if rho < 0:
-                        rho_right.append(rho); theta_right.append(theta)
-                        # snipp = plot_Hough_lines(snip, rho, theta)
-                        # cv2.imshow("Yup!", snipp)
+                        # collect LEFT lanes
+                        if theta < np.pi * 0.4 and theta > np.pi * 0.2:
+                        # if rho > 0:
+                            rho_left.append(rho); theta_left.append(theta)
+                            # snipp = plot_Hough_lines(snip, rho, theta)
+                            # cv2.imshow("Yup!", snipp)
 
-        # statistics to identify median lane dimensions
-        left_rho = median(rho_left); left_theta = median(theta_left)
-        right_rho = median(rho_right); right_theta = median(theta_right)
+                        # collect RIGHT lanes
+                        if theta > np.pi * 0.6 and theta < np.pi * 0.8:
+                        # if rho < 0:
+                            rho_right.append(rho); theta_right.append(theta)
+                            # snipp = plot_Hough_lines(snip, rho, theta)
+                            # cv2.imshow("Yup!", snipp)
 
-        # plot median lanes on top of scene snip
-        if left_theta < np.pi * 0.4 and left_theta > np.pi * 0.2:
-        # if left_theta > np.pi / 4:
-            (x1, y1, x2, y2) = plot_median_left_line(snip, left_rho, left_theta)
-            x_1.append(x1); y_1.append(y1); x_2.append(x2); y_2.append(y2)
+            # statistics to identify median lane dimensions
+            left_rho = median(rho_left); left_theta = median(theta_left)
+            right_rho = median(rho_right); right_theta = median(theta_right)
 
-            # average across multiple frames to smooth out lane identification
-            if len(x_1) > 50:
-                x1 = int(np.average(x_1[z:len(x_1)])); x2 = int(np.average(x_2[z:len(x_2)]))
-                y1 = int(np.average(y_1[z:len(y_1)])); y2 = int(np.average(y_2[z:len(y_2)]))
-                z = z + 1
+            # plot median lanes on top of scene snip
+            if left_theta < np.pi * 0.4 and left_theta > np.pi * 0.2:
+            # if left_theta > np.pi / 4:
+                (x1, y1, x2, y2) = plot_median_left_line(snip, left_rho, left_theta)
+                x_1.append(x1); y_1.append(y1); x_2.append(x2); y_2.append(y2)
 
-        if right_theta > np.pi * 0.6 and right_theta < np.pi * 0.8:
-            (x3, y3, x4, y4) = plot_median_right_line(snip, right_rho, right_theta)
-            x_3.append(x3); x_4.append(x4); y_3.append(y3); y_4.append(y4)
+                # average across multiple frames to smooth out lane identification
+                if len(x_1) > 50:
+                    x1 = int(np.average(x_1[z:len(x_1)])); x2 = int(np.average(x_2[z:len(x_2)]))
+                    y1 = int(np.average(y_1[z:len(y_1)])); y2 = int(np.average(y_2[z:len(y_2)]))
+                    z = z + 1
 
-            if len(x_3) > 50:
-                x3 = int(np.average(x_3[zz:len(x_3)])); x4 = int(np.average(x_4[zz:len(x_4)]))
-                y3 = int(np.average(y_3[zz:len(y_3)])); y4 = int(np.average(y_4[zz:len(y_4)]))
-                zz = zz + 1
+            if right_theta > np.pi * 0.6 and right_theta < np.pi * 0.8:
+                (x3, y3, x4, y4) = plot_median_right_line(snip, right_rho, right_theta)
+                x_3.append(x3); x_4.append(x4); y_3.append(y3); y_4.append(y4)
 
-        # calculate late lines and lane & plot on top of original scene
-        final = plot_final_lines(final_output, x1, y1, x2, y2, x3, y3, x4, y4)
-        cv2.imshow("Original Video + Lanes Detected", final)
+                if len(x_3) > 50:
+                    x3 = int(np.average(x_3[zz:len(x_3)])); x4 = int(np.average(x_4[zz:len(x_4)]))
+                    y3 = int(np.average(y_3[zz:len(y_3)])); y4 = int(np.average(y_4[zz:len(y_4)]))
+                    zz = zz + 1
 
-        # press the q key to break out of video
-        if cv2.waitKey(25) & 0xFF == ord('q'):
-            break
+            # calculate late lines and lane & plot on top of original scene
+            final = plot_final_lines(final_output, x1, y1, x2, y2, x3, y3, x4, y4)
+            cv2.imshow("Original Video + Lanes Detected", final)
+
+            # press the q key to break out of video
+            if cv2.waitKey(25) & 0xFF == ord('q'):
+                break
 
     print "Thanks for playing!"
 
