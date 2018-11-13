@@ -16,15 +16,12 @@ fourcc = cv2.VideoWriter_fourcc(*'XVID')
 # initialize the webcam
 camera1 = cv2.VideoCapture(0)
 camera2 = cv2.VideoCapture(3)
-camera3 = cv2.VideoCapture(1)
 
 # Set the camera resolution to 1280 x 720
 camera1.set(3, 1280)
 camera1.set(4, 720)
 camera2.set(3, 1280)
 camera2.set(4, 720)
-camera3.set(3, 1280)
-camera3.set(4, 720)
 
 # keep looping
 while True:
@@ -32,11 +29,9 @@ while True:
     # grab the current frame
     ret1, image1 = camera1.read()
     ret2, image2 = camera2.read()
-    ret3, image3 = camera3.read()
 
     image1 = imutils.resize(image1, height = 200)
     image2 = imutils.resize(image2, height = 200)
-    image3 = imutils.resize(image3, height = 200)
 
     # write the frame to video file
 	  # UNCOMMENT THE FOLLOWING ONE (1) LINE TO SAVE .avi VIDEO FILE
@@ -46,9 +41,8 @@ while True:
     cv2.line(image1, (image1.shape[1]/2, 0), (image1.shape[1]/2, image1.shape[0]), (0, 255, 0))
     cv2.imshow("Camera 1", image1)
     cv2.imshow("Camera 2", image2)
-    cv2.imshow("Camera 3", image3)
 
-    # package = np.vstack([image1, image2, image3])
+    # package = np.vstack([image1, image2])
     # cv2.imshow("Packaged Camera Views", package)
     # print package.shape[1]
     # print package.shape[0]
