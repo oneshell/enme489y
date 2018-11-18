@@ -7,8 +7,8 @@ import time
 time.sleep(0.1)
 
 # initialize the webcam
-camera1 = cv2.VideoCapture(1)
-camera2 = cv2.VideoCapture(2)
+camera1 = cv2.VideoCapture(0)
+camera2 = cv2.VideoCapture(1)
 
 # Set the camera resolution to 1280 x 720
 camera1.set(3, 1280)
@@ -24,8 +24,8 @@ while True:
     ret2, image2 = camera2.read()
 
     # resize the images
-    image1 = imutils.resize(image1, width = 300)
-    image2 = imutils.resize(image2, width = 300)
+    image1 = imutils.resize(image1, width = 500)
+    image2 = imutils.resize(image2, width = 500)
 
     # package and show the images to the screen
     package = np.hstack([image1, image2])
