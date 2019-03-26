@@ -11,7 +11,7 @@ import os
 time.sleep(1)
 
 # Enter the initial IMU angle from user
-d = raw_input("Please IMU angle: ")
+d = raw_input("Please enter IMU angle: ")
 print "Confirming the IMU angle you entered is: "
 print d
 
