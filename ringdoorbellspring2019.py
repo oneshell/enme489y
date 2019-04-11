@@ -138,7 +138,7 @@ while True:
 
 		# Now send email to the user to confirm video has been recorded
 
-		# SmartPin18@gmail login information
+		# Gmail login information
 		smtpUser = 'YOUREMAILHERE@gmail.com'
 		smtpPass = 'YOURPASSWORDHERE'
 
