@@ -122,7 +122,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 			now = datetime.datetime.now()
 			timestamp = now.strftime("%Y/%m/%d %H:%M")
 			outstring = str(timestamp)+" "+ str(x)+" "+str(y)+"\n"
-			print outstring
+			print(outstring)
 			f.write(outstring)
 			f.close()
 
