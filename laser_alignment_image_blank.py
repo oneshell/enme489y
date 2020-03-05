@@ -19,8 +19,7 @@ time.sleep(1)
 
 # Enter distance from wall, entered by the user
 d = raw_input("Please enter distance from wall, in inches: ")
-print "Confirming the distance you entered is: "
-print d
+print("Confirming the distance you entered is: ", d)
 
 # grab an image from the camera
 for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=False):
