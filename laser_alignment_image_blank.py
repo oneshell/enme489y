@@ -18,7 +18,7 @@ rawCapture = PiRGBArray(camera, size=(1280,720))
 time.sleep(1)
 
 # Enter distance from wall, entered by the user
-d = raw_input("Please enter distance from wall, in inches: ")
+d = input("Please enter distance from wall, in inches: ")
 print("Confirming the distance you entered is: ", d)
 
 # grab an image from the camera
