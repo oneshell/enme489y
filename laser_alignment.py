@@ -61,7 +61,7 @@ for x in files:  # x is the filename
             print(i)
             spot.append(i)
     if len(spot) > 0:
-        print spot
+        print(spot)
         spot = np.average(spot)
         spot = int(spot)
     else: 
