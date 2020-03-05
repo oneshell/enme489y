@@ -13,10 +13,10 @@ import datetime
 import matplotlib
 import matplotlib.pyplot as plt
 
-print "All packages imported properly!"
+print("All packages imported properly!")
 
 files = glob.glob('alignment_images/*.jpg')      # finds all the pathnames matching a specified pattern
-print files
+print(files)
 
 # define the lower and upper boundaries of the
 # red line in the HSV color space
@@ -29,11 +29,11 @@ x_plot = []
 y_plot = []
 
 for x in files:  # x is the filename
-    print x
+    print(x)
 
     distance = re.findall('\\d+', x)
     distance = map(int, distance)
-    print distance
+    print(distance)
 
     image = cv2.imread(x)
 
@@ -58,7 +58,7 @@ for x in files:  # x is the filename
     # identify laser returns
     for i in range(0,len(x)):
         if x[i] > 200:
-            print i
+            print(i)
             spot.append(i)
     if len(spot) > 0:
         print spot
@@ -77,7 +77,7 @@ for x in files:  # x is the filename
     now = datetime.datetime.now()
     timestamp = now.strftime("%Y/%m/%d %H:%M")
     outstring = str(distance).strip('[]') + " " + str(spot) + "\n"
-    print outstring
+    print(outstring)
     f.write(outstring)
     f.close()
 
